@@ -1,5 +1,5 @@
 'use strict';
-const { promises: { readFile } } = require('fs')
+const { get } = require('axios')
 
 class Handler {
   constructor ({ rekoSrvc, translateSrv }) {
@@ -39,12 +39,20 @@ class Handler {
       const confidence = workingItems[index].Confidence
       result.push(`${confidence.toFixed(2)}% de ser do tipo ${nameInPortugues}`)
     }
-    return result
+    return result.join('\n')
+  }
+
+  async getBufferImg(url){
+    const response = await get(url, { responseType: 'arraybuffer' })
+    const buffer = Buffer.from(response.data)
+    return buffer
   }
 
   async main(event){
     try {
-      const imgBuffer = await readFile('./imgs/cat.jpg')
+      const { imgUrl } = event.queryStringParameters
+      console.log('get buffer img...')
+      const imgBuffer = await this.getBufferImg(imgUrl)
       console.log('detect labels...')
       const { names, workingItems } = await this.detectImageLabels(imgBuffer)
       console.log('translate...')
