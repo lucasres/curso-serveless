@@ -1,0 +1,44 @@
+service: trigger-dynamo
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+  environment:
+    DYNAMODB_TABLE: Heroes
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:UpdateItem
+        - dynamodb:PutItem
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+
+resources:
+  Resources:
+    HeroesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
+        AttributeDefinitions: #criacao dos atributos da tabela
+          - AttributeName: id #nome id
+            AttributeType: S #tipo string, I seria inteiro e por ai vai...
+          - AttributeName: name #nome name
+            AttributeType: S #tipo string
+        KeySchema:
+          - AttributeName: id 
+            KeyType: HASH #informando que a chave usada pra pesquisar
+          - AttributeName: name
+            KeyType: RANGE #isso melhora na pesquisa(pelo que entendo eh como se fosse um index)
+        ProvisionedThroughput: #configuracoes de leitura/escrita no banco(menor paga menos, mais paga mais)
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+functions:
+  hero-insert:
+    handler: handler.heroesInsert
+    events:
+      - httpApi:
+          path: /heroes
+          method: get
