@@ -1,6 +1,6 @@
 const uuid = require('uuid')
 const Joi = require('@hapi/joi')
-const decoratorValidator = require('./decoratorValidator')
+const decoratorValidator = require('./utils/decoratorValidator')
 const Enums = require('./utils/enums')
 
 class Handler {

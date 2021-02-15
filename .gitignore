@@ -3,3 +3,4 @@ modulo03/api-rekognition/image-analysis/node_modules
 modulo04/trigger-dynamo/node_modules
 modulo04/trigger-dynamo/.serverless/
 modulo03/api-rekognition/image-analysis/.serverless/
+modulo05/lambda-environment/.serverless/

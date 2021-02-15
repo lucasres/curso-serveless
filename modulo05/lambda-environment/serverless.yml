@@ -1,0 +1,28 @@
+service: lambda-environment
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+  stage: ${opt:stage, "qa"} #quer dizer que se foi passado --stage pega o valor se nao vai default qa
+  environment:
+    ${file(./config/env.${self:provider.stage}.json)} #pega a variavel que foi definida
+
+custom:
+  scheduleRate: rate(1 minute)
+  enable: true
+  tableName: ${self:provider.environment.DbTableName}
+  dbWriteCapacityUnits: ${self:provider.environment.DbWriteCapacityUnits}
+  dbReadCapacityUnits: ${self:provider.environment.DbReadCapacityUnits} 
+
+
+functions:
+  commit-message-scheduler:
+    handler: handler.scheduler
+    events:
+      - schedule:
+        rate: ${self:custom.scheduleRate}
+        name: schedule-commit-message-${self:provider.stage}
+        description: get commit massage each minute
+        enable: ${self:custom.enable}

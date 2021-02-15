@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "invoke-local" : "sls invoke local -f hero-insert --path request-mock/heroes.insert.json",
     "invoke": "sls invoke -f hero-insert --path request-mock/heroes.insert.json",
-    "invoke-local-trigger": "sls invoke -f hero-trigger --path request-mock/heroes.trigger.json"
+    "invoke-local-trigger": "sls invoke -f hero-trigger --path request-mock/heroes.trigger.json --log"
   },
   "author": "",
   "license": "ISC",
