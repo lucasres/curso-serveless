@@ -1,4 +1,7 @@
 const uuid = require('uuid')
+const Joi = require('@hapi/joi')
+const decoratorValidator = require('./decoratorValidator')
+const Enums = require('./utils/enums')
 
 class Handler {
 
@@ -9,6 +12,13 @@ class Handler {
 
     async insertItem(params){
         return await this.dynamoDbScv.put(params).promise()
+    }
+
+    static validator() {
+        return Joi.object({
+            name: Joi.string().min(2).max(100).required(),
+            power: Joi.string().max(20).required(),
+        })
     }
 
     prepareData(data){
@@ -45,7 +55,7 @@ class Handler {
     async main(event){
         try {
             console.log('get data...')
-            const data = JSON.parse(event.body)
+            const data = event.body
             console.log('prepare data to insert...')
             const params = this.prepareData(data)
             console.log('insert into dynamoDB...')
@@ -60,7 +70,12 @@ class Handler {
 
 //factory
 const AWS = require('aws-sdk')
+const { required } = require('@hapi/joi')
 const dynamoDB = new AWS.DynamoDB.DocumentClient()
 const handler = new Handler({ dynamoDbScv: dynamoDB })
 
-module.exports = handler.main.bind(handler)
+module.exports = decoratorValidator(
+    handler.main.bind(handler),
+    Handler.validator(),
+    Enums.ARG_TYPE.BODY
+)

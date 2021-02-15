@@ -13,6 +13,8 @@ provider:
         - dynamodb:GetItem
         - dynamodb:UpdateItem
         - dynamodb:PutItem
+        - dynamodb:ListStreams #permissao pre listar os stream(como se fosse trigger, pelo que entendi)
+        - dynamodb:DescribeStream #descrever o stream
       Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
 resources:
@@ -34,6 +36,8 @@ resources:
         ProvisionedThroughput: #configuracoes de leitura/escrita no banco(menor paga menos, mais paga mais)
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        StreamSpecification: #configura que os trigger serao para novos e update de antigas entrada na tabela
+          StreamViewType: NEW_AND_OLD_IMAGES          
 
 functions:
   hero-insert:
@@ -42,3 +46,13 @@ functions:
       - httpApi:
           path: /heroes
           method: get
+  #function invocada via trigger no dynamo db
+  hero-trigger:
+    handler: handler.heroesTrigger
+    events:
+      - stream:
+          type: dynamodb
+          arn:
+            Fn::GetAtt: #pegando o ARN da tabela criada
+              - HeroesTable
+              - StreamArn

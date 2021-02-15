@@ -4,11 +4,15 @@
   "description": "",
   "main": "handler.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "invoke-local" : "sls invoke local -f hero-insert --path request-mock/heroes.insert.json",
+    "invoke": "sls invoke -f hero-insert --path request-mock/heroes.insert.json",
+    "invoke-local-trigger": "sls invoke -f hero-trigger --path request-mock/heroes.trigger.json"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
     "aws-sdk": "^2.843.0"
   }
 }
