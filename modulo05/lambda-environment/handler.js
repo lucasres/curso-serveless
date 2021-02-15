@@ -1,20 +1,22 @@
 'use strict';
+const settings = require('./config/settings')
+const axios = require('axios')
+const cheerio = require('cheerio')
 
-module.exports.scheduler = async (event) => {
-  console.log(process.env)
+class Handler {
+  static async main(event) {
+    // console.log('at', new Date().toISOString(), JSON.stringify(event, null, 2))
+    console.log('get data...')
+    const { data } = await axios.get(settings.commitMessageUrl)
+    const $ = cheerio.load(data)
+    const [ commitMessage ] = $("#content").text().trim().split('\n')
+    console.log('commit message', commitMessage)
+    return {
+      statusCode: 200
+    }
+  }
+}
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v1.0! Your function executed successfully!',
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
-
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
-};
+module.exports = {
+  scheduler: Handler.main
+}

@@ -8,6 +8,8 @@ provider:
   stage: ${opt:stage, "qa"} #quer dizer que se foi passado --stage pega o valor se nao vai default qa
   environment:
     ${file(./config/env.${self:provider.stage}.json)} #pega a variavel que foi definida
+  iamRoleStatements:
+    ${file(./config/serverless/db.iam.role.yml)}
 
 custom:
   scheduleRate: rate(1 minute)
@@ -16,13 +18,17 @@ custom:
   dbWriteCapacityUnits: ${self:provider.environment.DbWriteCapacityUnits}
   dbReadCapacityUnits: ${self:provider.environment.DbReadCapacityUnits} 
 
+resources:
+  Resources:
+    ${file(./config/serverless/resources/dynamo.hero.table.yml)}
+
 
 functions:
   commit-message-scheduler:
     handler: handler.scheduler
     events:
-      - schedule:
-        rate: ${self:custom.scheduleRate}
-        name: schedule-commit-message-${self:provider.stage}
-        description: get commit massage each minute
-        enable: ${self:custom.enable}
+      - schedule: ${self:custom.scheduleRate}
+        # rate: ${self:custom.scheduleRate}
+        # name: schedule-commit-message-${self:provider.stage}
+        # description: get commit massage each minute
+        # enable: ${self:custom.enable}
