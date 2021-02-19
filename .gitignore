@@ -5,3 +5,5 @@ modulo04/trigger-dynamo/.serverless/
 modulo03/api-rekognition/image-analysis/.serverless/
 modulo05/lambda-environment/.serverless/
 modulo05/lambda-environment/node_modules/
+modulo06/layers-nodejs-modules/layer/nodejs/node_modules/
+modulo06/layers-nodejs-modules/.serverless/

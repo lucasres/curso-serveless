@@ -1,0 +1,23 @@
+service: layers-nodejs-modules
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: '/hello'
+          method: 'get'
+    layers:
+      - {Ref: NodeModulesLambdaLayer} #essa eh uma conversao ele consegue recuperar o arn da layer
+
+layers:
+  NodeModules:
+    path: layer #pasta criada onde tem outra pasta chamada nodejs(obrigatorio)
+    compatibleRuntimes:
+      - nodejs12.x
