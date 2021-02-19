@@ -7,3 +7,5 @@ modulo05/lambda-environment/.serverless/
 modulo05/lambda-environment/node_modules/
 modulo06/layers-nodejs-modules/layer/nodejs/node_modules/
 modulo06/layers-nodejs-modules/.serverless/
+modulo06/yumda-example/dependencies
+modulo06/yumda-example/.serverless
