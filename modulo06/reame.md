@@ -6,7 +6,7 @@ Trabalhando com layers. Usando binários como dependencias.
 
 * Para poder usar as layers tem que criar uma pasta chamado nodejs
 
-* O projeto do yumba contem alguns binários que são para manipulação de imagens, sons e etc. Uma observação é que devemos zipar a pasta dependencies que é o que o yumba baixa os binários criar um link simbolico pra ela e assim nao teremos problemas de versão uma vez que ambas usam as mesmas dependencias
+* O projeto do yumba contem alguns binários que são para manipulação de imagens, sons e etc. Uma observação é que devemos zipar a pasta dependencies que é o que o [yumba](https://github.com/lambci/yumda) baixa os binários criar um link simbolico pra ela e assim nao teremos problemas de versão uma vez que ambas usam as mesmas dependencias
 
 instalando as dependencias
 
